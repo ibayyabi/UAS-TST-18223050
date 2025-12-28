@@ -1,10 +1,12 @@
 {
-    "version": 2,
-    "routes": [
+    "rewrites": [
         {
-            "src": "/api/(.*)",
-            "dest": "/api/index"
+            "source": "/api/(.*)",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/public/$1"
         }
-    ],
-    "outputDirectory": "public"
+    ]
 }
