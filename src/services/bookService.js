@@ -1,5 +1,6 @@
 const axios = require('axios');
 const config = require('../config/config');
+const MANUAL_BOOK_COVERS = require('../config/bookCovers');
 
 /**
  * Service untuk berinteraksi dengan Book Catalog API.
@@ -109,18 +110,32 @@ class BookService {
      */
     _normalizeBook(book) {
         if (!book) return null;
+
+        // Check manual cover mapping first (case-insensitive)
+        let coverUrl = book.cover_url || null;
+        const titleLower = book.title.toLowerCase();
+
+        for (const [mappedTitle, mappedUrl] of Object.entries(MANUAL_BOOK_COVERS)) {
+            if (titleLower === mappedTitle.toLowerCase()) {
+                coverUrl = mappedUrl;
+                console.log(`✓ Using manual cover for "${book.title}"`);
+                break;
+            }
+        }
+
         return {
             id: book.id,
             title: book.title,
             author: book.author || 'Unknown',
             genre: book.genre,
-            language: book.language || 'N/A', // Tambahkan ini
-            pub_year: book.pub_year || 'N/A',   // Tambahkan ini
-            age_category: book.age_category || 'General', // Tambahkan ini
+            language: book.language || 'N/A',
+            pub_year: book.pub_year || 'N/A',
+            age_category: book.age_category || 'General',
             rating: book.rating || '0.0',
             tags: typeof book.tags === 'string' ? book.tags.split(',').map(t => t.trim()) : (book.tags || []),
             description: book.description || 'No description available.',
-            page_count: book.page_count || 'N/A' // Pastikan ini terisi
+            page_count: book.page_count || 'N/A',
+            cover_url: coverUrl // Manual cover takes priority
         };
     }
 

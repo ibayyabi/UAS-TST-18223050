@@ -200,6 +200,40 @@ class SoundtrackController {
         }
     }
 
+    /**
+     * Explore music catalog with filters
+     * Allows browsing music by genre, mood, energy level
+     * @param {Object} req - Express request (query: genre, mood, energy_max, limit)
+     * @param {Object} res - Express response
+     */
+    async exploreMusic(req, res) {
+        try {
+            const { genre, mood, energy_max, limit } = req.query;
+
+            console.log(`Exploring music with filters:`, { genre, mood, energy_max, limit });
+
+            const musicTracks = await musicService.searchMusic({
+                genre: genre || undefined,
+                mood: mood || undefined,
+                energyMax: energy_max ? parseInt(energy_max) : undefined,
+                limit: limit ? parseInt(limit) : 20
+            });
+
+            return res.status(200).json({
+                success: true,
+                data: musicTracks
+            });
+
+        } catch (error) {
+            console.error('Explore music error:', error.message);
+
+            return res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    }
+
 }
 
 module.exports = new SoundtrackController();

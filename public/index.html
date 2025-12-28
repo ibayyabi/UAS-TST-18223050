@@ -1,130 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Reading Soundtrack - Discover Perfect Music for Your Books</title>
-    <meta name="description"
-        content="Discover the perfect music soundtrack for your books using AI-powered recommendations">
+    <title>The Reading Ibay - Temukan Musik untuk Buku Anda</title>
+    <meta name="description" content="Temukan soundtrack sempurna untuk buku favorit Anda menggunakan AI">
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="logo">🎵📖 THE READING SOUNDTRACK</h1>
-                <p class="tagline">Discover the perfect music for your reading journey</p>
+        <!-- Navigation Bar -->
+        <nav class="navbar" id="navbar">
+            <div class="nav-content">
+                <h1 class="nav-logo">🎵 The Reading Ibay</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn" data-screen="home">Beranda</button>
+                    <button class="nav-btn" data-screen="explore">Jelajah Musik</button>
+                </div>
             </div>
-        </header>
+        </nav>
 
-        <!-- Search Section -->
-        <section class="search-section">
-            <div class="search-box">
-                <input type="text" id="bookIdInput" class="search-input"
-                    placeholder="Search by book title, author, or tags (e.g., Harry Potter, Tolkien, fantasy)" autocomplete="off">
-                <button id="searchBtn" class="search-btn">
-                    <span class="btn-text">Find Book</span>
-                    <span class="btn-icon">🔍</span>
-                </button>
+        <!-- Screen 1: Home / Discovery -->
+        <section id="home-screen" class="screen active">
+            <div class="header">
+                <h1 class="logo">🎵📖 THE READING IBAY</h1>
+                <p class="tagline">Temukan Soundtrack untuk Buku Favoritmu</p>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="search-input"
+                        placeholder="Cari buku berdasarkan judul, penulis, atau genre..." autocomplete="off">
+                    <button id="searchBtn" class="search-btn">
+                        <span class="btn-text">Cari Buku</span>
+                        <span class="btn-icon">🔍</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="trending-section" id="trendingSection">
+                <h2 class="section-title">📚 Buku Populer</h2>
+                <div id="trendingBooks" class="trending-grid">
+                    <!-- Trending books will be dynamically inserted -->
+                </div>
             </div>
         </section>
 
-        <!-- Loading State -->
-        <div id="loadingState" class="loading-state hidden">
-            <div class="spinner"></div>
-            <p class="loading-text">Analyzing book with AI...</p>
-            <p class="loading-subtext">Connecting to API</p>
-        </div>
+        <!-- Screen 2: Search Results -->
+        <section id="search-results-screen" class="screen hidden">
+            <button class="back-btn" data-back="home">← Kembali ke Beranda</button>
 
-        <!-- Error State -->
-        <div id="errorState" class="error-state hidden">
-            <div class="error-icon">⚠️</div>
-            <h3 class="error-title">Oops! Something went wrong</h3>
-            <p id="errorMessage" class="error-message"></p>
-            <button id="retryBtn" class="retry-btn">Try Again</button>
-        </div>
+            <div class="results-header">
+                <h2 class="results-title">Hasil Pencarian</h2>
+                <p id="searchQuery" class="search-query"></p>
+            </div>
 
-        <!-- Results Section -->
-        <section id="resultsSection" class="results-section hidden">
-            <div class="results-grid">
-                <!-- Book Information Card -->
-                <div class="card book-card">
-                    <div class="card-header">
-                        <h2 class="card-title">📚 Book Information</h2>
+            <div id="searchResults" class="search-grid">
+                <!-- Search results will be dynamically inserted -->
+            </div>
+
+            <div id="pagination" class="pagination hidden">
+                <button id="prevPage" class="page-btn">← Sebelumnya</button>
+                <span id="pageInfo" class="page-info"></span>
+                <button id="nextPage" class="page-btn">Selanjutnya →</button>
+            </div>
+        </section>
+
+        <!-- Screen 3: Book Detail & Confirmation -->
+        <section id="book-detail-screen" class="screen hidden">
+            <button class="back-btn" data-back="search-results">← Kembali ke Hasil Pencarian</button>
+
+            <div class="detail-card">
+                <div class="detail-grid">
+                    <div class="detail-left">
+                        <div id="detailCover" class="book-cover-large">📖</div>
                     </div>
-                    <div class="card-body">
-                        <div class="book-cover">
-                            <div class="book-cover-placeholder">📖</div>
+                    <div class="detail-right">
+                        <h1 id="detailTitle" class="detail-title"></h1>
+                        <p id="detailAuthor" class="detail-author"></p>
+                        <div id="detailGenre" class="detail-genre"></div>
+
+                        <div class="detail-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Bahasa</span>
+                                <span id="detailLanguage" class="meta-value"></span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Tahun Terbit</span>
+                                <span id="detailYear" class="meta-value"></span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Halaman</span>
+                                <span id="detailPages" class="meta-value"></span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Rating</span>
+                                <span id="detailRating" class="meta-value"></span>
+                            </div>
                         </div>
-                        <h3 id="bookTitle" class="book-title"></h3>
-                        <div id="bookGenre" class="book-genre"></div>
-                        <p id="bookDescription" class="book-description"></p>
-                        <div id="bookTags" class="book-tags"></div>
-                        <div class="divider"></div>
-                        <div class="book-details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);">
-                            <div><strong>Author:</strong> <span id="bookAuthor"></span></div>
-                            <div><strong>Language:</strong> <span id="bookLanguage"></span></div>
-                            <div><strong>Published:</strong> <span id="bookYear"></span></div>
-                            <div><strong>Pages:</strong> <span id="bookPages"></span></div>
-                            <div><strong>Age:</strong> <span id="bookAge"></span></div>
+
+                        <div class="detail-description">
+                            <h3>Sinopsis</h3>
+                            <p id="detailDescription"></p>
+                        </div>
+
+                        <div id="detailTags" class="detail-tags"></div>
+
+                        <button id="generateBtn" class="generate-btn">
+                            🎵 Generate Music Soundtrack
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 4: AI Processing / Loading State -->
+        <section id="loading-screen" class="screen hidden">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p class="loading-text">Menganalisis suasana buku...</p>
+                <p class="loading-subtext" id="loadingSubtext">Menghubungkan dengan AI...</p>
+            </div>
+        </section>
+
+        <!-- Screen 5: Music Recommendation Dashboard -->
+        <section id="recommendation-screen" class="screen hidden">
+            <button class="back-btn" data-back="book-detail">← Kembali ke Detail Buku</button>
+
+            <div class="recommendation-layout">
+                <!-- Selected Book Context -->
+                <div class="selected-book-card">
+                    <h3 class="card-section-title">📚 Buku Yang Dipilih</h3>
+                    <div class="selected-book-content">
+                        <div id="selectedCover" class="selected-cover">📖</div>
+                        <div class="selected-info">
+                            <h4 id="selectedTitle" class="selected-title"></h4>
+                            <p id="selectedAuthor" class="selected-author"></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Music Recommendations Card -->
-                <div class="card music-card">
-                    <div class="card-header">
-                        <h2 class="card-title">🎵 Your Reading Soundtrack</h2>
+                <!-- Music Profile -->
+                <div class="music-profile-card">
+                    <h3 class="card-section-title">🎵 Profil Musik</h3>
+                    <div class="profile-grid">
+                        <div class="profile-item-box">
+                            <span class="profile-label">Genre Utama</span>
+                            <span id="recGenre" class="profile-value genre-tag"></span>
+                        </div>
+                        <div class="profile-item-box">
+                            <span class="profile-label">Mood</span>
+                            <span id="recMood" class="profile-value mood-tag"></span>
+                        </div>
+                        <div class="profile-item-box">
+                            <span class="profile-label">Energy Level</span>
+                            <div class="energy-bar">
+                                <div id="recEnergy" class="energy-fill"></div>
+                                <span id="recEnergyValue" class="energy-value"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <!-- Music Profile -->
-                        <div class="music-profile">
-                            <div class="profile-item">
-                                <span class="profile-label">Primary Genre</span>
-                                <span id="primaryGenre" class="profile-value genre-tag"></span>
-                            </div>
-                            <div class="profile-item">
-                                <span class="profile-label">Mood</span>
-                                <span id="mood" class="profile-value mood-tag"></span>
-                            </div>
-                            <div class="profile-item">
-                                <span class="profile-label">Energy Level</span>
-                                <div class="energy-bar">
-                                    <div id="energyLevel" class="energy-fill"></div>
-                                    <span id="energyValue" class="energy-value"></span>
-                                </div>
-                            </div>
-                            <div class="profile-reasoning">
-                                <span class="reasoning-label">💡 Why this music?</span>
-                                <p id="reasoning" class="reasoning-text"></p>
-                            </div>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="divider"></div>
-
-                        <!-- Music Tracks -->
-                        <div class="tracks-header">
-                            <h3 class="tracks-title">Recommended Tracks</h3>
-                            <span id="trackCount" class="track-count"></span>
-                        </div>
-                        <div id="musicTracks" class="music-tracks">
-                            <!-- Tracks will be dynamically inserted here -->
-                        </div>
+                    <div class="profile-reasoning">
+                        <span class="reasoning-label">💡 Mengapa musik ini?</span>
+                        <p id="recReasoning" class="reasoning-text"></p>
                     </div>
                 </div>
+
+                <!-- Music Tracks -->
+                <div class="music-tracks-card">
+                    <div class="tracks-header">
+                        <h3 class="card-section-title">🎶 Rekomendasi Musik</h3>
+                        <span id="trackCount" class="track-count"></span>
+                    </div>
+                    <div id="musicTracks" class="music-tracks">
+                        <!-- Tracks will be dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 6: Explore Music -->
+        <section id="explore-screen" class="screen hidden">
+            <button class="back-btn" data-back="home">← Kembali ke Beranda</button>
+
+            <div class="explore-header">
+                <h2 class="explore-title">🎵 Jelajah Musik</h2>
+                <p class="explore-subtitle">Temukan musik berdasarkan mood dan genre favorit Anda</p>
+            </div>
+
+            <div class="explore-filters">
+                <div class="filter-group">
+                    <label class="filter-label">Genre</label>
+                    <select id="genreFilter" class="filter-select">
+                        <option value="">Semua Genre</option>
+                        <option value="Classical">Classical</option>
+                        <option value="Jazz">Jazz</option>
+                        <option value="Ambient">Ambient</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Orchestral">Orchestral</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Folk">Folk</option>
+                        <option value="Rock">Rock</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Mood</label>
+                    <select id="moodFilter" class="filter-select">
+                        <option value="">Semua Mood</option>
+                        <option value="Happy">Happy</option>
+                        <option value="Sad">Sad</option>
+                        <option value="Calm">Calm</option>
+                        <option value="Energetic">Energetic</option>
+                        <option value="Melancholic">Melancholic</option>
+                        <option value="Relaxed">Relaxed</option>
+                        <option value="Intense">Intense</option>
+                    </select>
+                </div>
+
+                <button id="applyFilters" class="apply-filters-btn">Terapkan Filter</button>
+            </div>
+
+            <div id="exploreResults" class="explore-grid">
+                <!-- Explore results will be dynamically inserted -->
+            </div>
+
+            <div id="exploreLoadMore" class="load-more-section hidden">
+                <button id="loadMoreBtn" class="load-more-btn">Muat Lebih Banyak</button>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Powered by <strong>Gemini AI</strong> • Integration Project TST</p>
+            <p>18223050 • Integration Project TST</p>
         </footer>
     </div>
 

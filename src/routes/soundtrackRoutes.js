@@ -44,4 +44,11 @@ router.get('/search-book/:bookId', soundtrackController.testBookApi.bind(soundtr
  */
 router.get('/book-by-title', soundtrackController.getBookByTitle.bind(soundtrackController));
 
+/**
+ * @route   GET /api/explore-music?genre=Jazz&mood=Relaxed&energy_max=5&limit=20
+ * @desc    Explore music catalog with optional filters
+ * @access  Public
+ */
+router.get('/explore-music', soundtrackController.exploreMusic.bind(soundtrackController));
+
 module.exports = router;
