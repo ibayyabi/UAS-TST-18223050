@@ -2,8 +2,7 @@
 
 # 📚 The Reading Ibay 🎵
 
-**UAS II3160 - Teknologi Sistem Terintegrasi** 
-**Penyusun:** M Ikhbar A (18223050)
+**UAS II3160 - Teknologi Sistem Terintegrasi** **Penyusun:** M Ikhbar A (18223050)
 
 ---
 
