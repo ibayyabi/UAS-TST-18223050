@@ -1,4 +1,6 @@
-18223050 - M Ikhbar A
+# The Reading Ibay
+## UAS II3160 - Teknologi Sistem Terintegrasi
+## M Ikhbar A 18223050
 
 ## 📖 Overview
 
