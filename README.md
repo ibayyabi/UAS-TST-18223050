@@ -1,23 +1,37 @@
-# The Reading Ibay
-## UAS II3160 - Teknologi Sistem Terintegrasi
-## M Ikhbar A 18223050
+---
 
-## 📖 Overview
+# 📚 The Reading Ibay 🎵
 
-The Reading Ibay adalah layanan integrasi yang menghubungkan API Katalog Buku (Service A - Rekan) dengan API Katalog Musik (Service B - Saya). Layanan ini menggunakan Gemini AI untuk menganalisis deskripsi buku dan menentukan profil musik yang cocok, kemudian memberikan rekomendasi musik yang sesuai dengan atmosfer buku.
+**UAS II3160 - Teknologi Sistem Terintegrasi** 
+**Penyusun:** M Ikhbar A (18223050)
 
-**Project ini adalah bagian dari Tugas 3 (Integrasi Layanan) untuk proyek akhir TST.**
+---
 
-## 🎯 Features
+## 📖 Ringkasan Proyek
 
-- ✅ Integrasi otomatis Book API → Gemini AI → Music API
-- ✅ AI-powered music recommendation berdasarkan analisis buku
-- ✅ Web interface yang modern dan responsive
-- ✅ Real-time music profile generation (genre, mood, energy)
-- ✅ Error handling dan fallback strategy
-- ✅ RESTful API dengan JSON response
+**The Reading Ibay** adalah layanan integrasi cerdas yang menghubungkan **API Katalog Buku** (Service A - Rekan) dengan **API Katalog Musik** (Service B - Internal).
 
-## 🏗️ Architecture
+Layanan ini memanfaatkan **Gemini AI** untuk menganalisis deskripsi dan tema buku guna menentukan profil musik yang paling sesuai (genre, suasana, dan energi). Hasil akhirnya adalah sebuah "Soundtrack" kurasi AI yang memberikan pengalaman membaca yang lebih imersif.
+
+> [!NOTE]
+> Proyek ini merupakan pemenuhan **Tugas 3 (Integrasi Layanan)** untuk proyek akhir mata kuliah Teknologi Sistem Terintegrasi (TST).
+
+---
+
+## 🎯 Fitur Utama
+
+* ✅ **Integrasi End-to-End:** Alur otomatis mulai dari pengambilan data Buku → Analisis Gemini AI → Pencarian Musik.
+* ✅ **AI-Powered Recommendation:** Rekomendasi musik yang akurat berdasarkan analisis sentimen dan tema buku.
+* ✅ **Antarmuka Modern:** Interface web yang responsif dengan animasi yang halus.
+* ✅ **Profil Musik Real-time:** Menghasilkan metadata musik (genre, mood, energi) secara instan.
+* ✅ **Strategi Fallback:** Penanganan error yang kuat jika salah satu service mengalami kendala.
+* ✅ **RESTful API:** Mendukung integrasi pihak ketiga dengan format JSON standar.
+
+---
+
+## 🏗️ Arsitektur Sistem
+
+Layanan ini menggunakan pola **Orchestration**, di mana *Integration API* bertindak sebagai konduktor utama yang mengatur aliran data antar layanan.
 
 ```
 ┌──────────┐    ┌─────────────────────┐    ┌─────────────┐
@@ -35,93 +49,112 @@ The Reading Ibay adalah layanan integrasi yang menghubungkan API Katalog Buku (S
                                              │  Music API  │
                                              │ (Service B) │
                                              └─────────────┘
+
 ```
 
-## 🚫 Deployment Strategy
+---
 
-**Layanan ini TIDAK dideploy di STB** karena:
-- Beban komputasi AI (Gemini API calls) dapat menyebabkan latency
-- Resource intensif (memory & CPU)
-- STB harus fokus pada core service (Music API)
-- Orchestration layer harus terpisah untuk scalability
+## 🚫 Strategi Deployment
 
-**Recommended**: Deploy di server terpisah (VPS/Cloud) atau local development machine.
+Layanan ini **TIDAK dideploy pada STB (Set-Top Box)** dengan pertimbangan:
+
+1. **Latency:** Panggilan API ke Gemini AI membutuhkan waktu pemrosesan yang dapat membebani resource STB.
+2. **Resource Intensif:** Pengolahan data dan koordinasi antar service memakan memori dan CPU yang lebih besar.
+3. **Separation of Concerns:** Menjaga agar STB tetap fokus pada layanan inti (Music API).
+
+**Rekomendasi:** Gunakan server terpisah seperti VPS, Cloud (Google Cloud/AWS), atau mesin lokal untuk performa optimal.
+
+---
 
 ## 🛠️ Tech Stack
 
-**Backend:**
-- Node.js 18+
-- Express.js 4.x
-- Axios (HTTP client)
-- @google/generative-ai (Gemini SDK)
-- dotenv, cors, helmet
+### **Backend**
 
-**Frontend:**
-- HTML5 + Vanilla CSS + Vanilla JavaScript
-- Modern responsive design with animations
+* **Runtime:** Node.js 18+
+* **Framework:** Express.js 4.x
+* **HTTP Client:** Axios
+* **AI Engine:** @google/generative-ai (Gemini SDK)
+* **Security:** Helmet, CORS
 
-## 📦 Installation
+### **Frontend**
 
-### Prerequisites
+* HTML5 & Vanilla CSS (Custom UI/UX)
+* Vanilla JavaScript (Modern ES6+)
 
-- Node.js version 18 or higher
-- npm (Node Package Manager)
-- API Keys:
-  - Gemini AI API Key (from [Google AI Studio](https://ai.google.dev/))
-  - Book API credentials (from rekan)
-  - Music API credentials (yours)
+---
 
-### Setup Steps
+## 📦 Panduan Instalasi
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### Prasyarat
 
-2. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   ```
+* Node.js versi 18 ke atas
+* npm (Node Package Manager)
+* API Keys:
+* Gemini AI API Key ([Dapatkan di Google AI Studio](https://ai.google.dev/))
+* Kredensial API Buku (dari Rekan)
+* Kredensial API Musik
 
-3. **Edit `.env` file:**
-   ```env
-   PORT=3000
-   GEMINI_API_KEY=your_actual_gemini_api_key
-   BOOK_API_BASE_URL=http://book-api-url.com/api
-   BOOK_API_KEY=your_book_api_key
-   MUSIC_API_BASE_URL=http://music-api-url.com/api
-   MUSIC_API_KEY=your_music_api_key
-   ```
 
-## 🚀 Usage
 
-### Development Mode (with auto-reload)
+### Langkah-langkah Setup
+
+1. **Clone dan Instal Dependensi:**
+```bash
+npm install
+
+```
+
+
+2. **Konfigurasi Environment:**
+```bash
+cp .env.example .env
+
+```
+
+
+3. **Isi variabel di file `.env`:**
+```env
+PORT=3000
+GEMINI_API_KEY=isi_api_key_gemini_anda
+BOOK_API_BASE_URL=http://url-api-buku.com/api
+BOOK_API_KEY=api_key_buku
+MUSIC_API_BASE_URL=http://url-api-musik.com/api
+MUSIC_API_KEY=api_key_musik
+
+```
+
+
+
+---
+
+## 🚀 Penggunaan
+
+### Mode Pengembangan (Auto-reload)
+
 ```bash
 npm run dev
+
 ```
 
-### Production Mode
+### Mode Produksi
+
 ```bash
 npm start
+
 ```
 
-Application will run at: `http://localhost:3000`
+Aplikasi dapat diakses melalui: `http://localhost:3000`
 
-### Web Interface
+---
 
-1. Open browser and navigate to `http://localhost:3000`
-2. Enter a Book ID in the search box
-3. Click "Find Soundtrack"
-4. View book information and music recommendations
+## 🌐 Dokumentasi API
 
-### API Endpoints
+### 1. Mendapatkan Rekomendasi Soundtrack
 
-#### Get Soundtrack Recommendations
-```
-GET /api/soundtrack/:bookId
-```
+**Endpoint:** `GET /api/soundtrack/:bookId`
 
-**Response:**
+**Contoh Response Sukses:**
+
 ```json
 {
   "success": true,
@@ -129,151 +162,49 @@ GET /api/soundtrack/:bookId
     "book": {
       "id": "123",
       "title": "The Underground Detective",
-      "genre": "Mystery/Noir",
-      "description": "...",
-      "tags": ["crime", "urban", "1940s"]
+      "genre": "Mystery",
+      "description": "Detektif yang mencari jejak di kota gelap..."
     },
     "musicProfile": {
       "primaryGenre": "jazz",
-      "secondaryGenre": "blues",
       "mood": "dark",
       "energy": 4,
-      "tempo": "slow",
-      "reasoning": "..."
+      "reasoning": "Karena buku memiliki tema noir dan misteri urban."
     },
     "recommendations": [
       {
         "id": "m456",
         "title": "Midnight Blues",
-        "artist": "Miles Davis",
-        "genre": "jazz",
-        "duration": 240
+        "artist": "Miles Davis"
       }
     ]
   }
 }
-```
-
-#### Health Check
-```
-GET /api/health
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "status": "ok",
-  "timestamp": "2025-12-27T00:00:00.000Z",
-  "services": {
-    "gemini": "connected"
-  }
-}
-```
-
-## 📁 Project Structure
 
 ```
-integrated_service/
-├── src/
-│   ├── config/
-│   │   └── config.js              # Configuration management
-│   ├── controllers/
-│   │   └── soundtrackController.js # Main orchestration logic
-│   ├── services/
-│   │   ├── bookService.js         # Book API integration
-│   │   ├── musicService.js        # Music API integration
-│   │   └── geminiService.js       # Gemini AI integration
-│   ├── prompts/
-│   │   └── musicMappingPrompt.js  # Gemini AI prompts
-│   ├── routes/
-│   │   └── soundtrackRoutes.js    # API routes
-│   ├── middleware/
-│   │   └── errorHandler.js        # Error handling
-│   ├── app.js                     # Express setup
-│   └── server.js                  # Server initialization
-├── public/
-│   ├── index.html                 # Web interface
-│   ├── css/
-│   │   └── styles.css             # Styling
-│   └── js/
-│       └── app.js                 # Client JavaScript
-├── .env                           # Environment variables
-├── .env.example                   # Template
-├── package.json                   # Dependencies
-└── README.md                      # This file
-```
 
-## 🧪 Testing
+### 2. Cek Kesehatan Sistem
 
-### Manual Testing
-
-```bash
-# Health check
-curl http://localhost:3000/api/health
-
-# Get soundtrack for book ID 1
-curl http://localhost:3000/api/soundtrack/1
-```
-
-### Testing Checklist
-
-- [ ] Application starts without errors
-- [ ] Web interface accessible in browser
-- [ ] Search with valid Book ID returns results
-- [ ] Book information displays correctly
-- [ ] Music recommendations display correctly
-- [ ] Music profile matches book atmosphere
-- [ ] Error handling works (invalid Book ID)
-- [ ] Response time acceptable (< 10 seconds)
-
-## 🔧 Troubleshooting
-
-**Error: "GEMINI_API_KEY is not defined"**
-- Ensure `.env` file exists and contains valid API key
-- Restart application after editing `.env`
-
-**Error: "Book not found"**
-- Verify Book API is running
-- Check `BOOK_API_BASE_URL` in `.env`
-- Verify Book ID is valid
-
-**Error: "Music API unavailable"**
-- Verify Music API is running
-- Check `MUSIC_API_BASE_URL` and `MUSIC_API_KEY` in `.env`
-
-**Slow response time**
-- Normal latency is 2-5 seconds (3 API calls)
-- Check internet connection
-- Consider implementing caching
-
-## 📚 Documentation
-
-For detailed documentation, see:
-- `README.txt` - Comprehensive operational guide (Indonesia)
-- `ARCHITECTURE.md` - Technical architecture details
-
-## 🤝 Integration Details
-
-This service integrates three components:
-
-1. **Book Catalog API** (Service A - Rekan): Provides book information
-2. **Gemini AI**: Analyzes books and generates music profiles
-3. **Music Catalog API** (Service B - Yours): Provides music recommendations
-
-## 📄 License
-
-This project is created for academic purposes (TST - Tugas 3).
-
-## 👥 Contact
-
-For questions or issues:
-- Book API: Contact your rekan
-- Music API: Your documentation
-- Gemini AI: [Google AI Documentation](https://ai.google.dev/docs)
+**Endpoint:** `GET /api/health`
 
 ---
 
-**Version:** 1.0.0  
-**Last Updated:** 2025-12-27  
-**Powered by:** Gemini AI
+## 📁 Struktur Folder
+
+```text
+integrated_service/
+├── src/
+│   ├── controllers/      # Logika orkestrasi utama
+│   ├── services/         # Integrasi API (Book, Music, Gemini)
+│   ├── prompts/          # Template prompt untuk Gemini AI
+│   ├── routes/           # Definisi endpoint API
+│   └── app.js            # Inisialisasi Express
+├── public/               # File statis (Frontend)
+│   ├── index.html
+│   ├── css/
+│   └── js/
+└── .env                  # Konfigurasi rahasia
+
+```
+
+---
