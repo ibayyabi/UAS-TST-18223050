@@ -1,10 +1,8 @@
-# The Reading Soundtrack
-
-Integration service that connects Book Catalog API with Music Catalog API using Gemini AI as decision maker.
+18223050 - M Ikhbar A
 
 ## 📖 Overview
 
-The Reading Soundtrack adalah layanan integrasi yang menghubungkan API Katalog Buku (Service A - Rekan) dengan API Katalog Musik (Service B - Saya). Layanan ini menggunakan Gemini AI untuk menganalisis deskripsi buku dan menentukan profil musik yang cocok, kemudian memberikan rekomendasi musik yang sesuai dengan atmosfer buku.
+The Reading Ibay adalah layanan integrasi yang menghubungkan API Katalog Buku (Service A - Rekan) dengan API Katalog Musik (Service B - Saya). Layanan ini menggunakan Gemini AI untuk menganalisis deskripsi buku dan menentukan profil musik yang cocok, kemudian memberikan rekomendasi musik yang sesuai dengan atmosfer buku.
 
 **Project ini adalah bagian dari Tugas 3 (Integrasi Layanan) untuk proyek akhir TST.**
 
