@@ -40,7 +40,7 @@ class GeminiService {
     // Temporary: Use Map-based cache until cache-manager v5 API is fixed
     this.cache = new Map();
     
-    const maxEntries = parseInt(process.env.MAX_CACHE_SIZE) || 500;
+    const maxEntries = parseInt(process.env.MAX_CACHE_SIZE) || 200;
     const ttlDays = parseInt(process.env.CACHE_TTL_DAYS) || 7;
     
     console.log(

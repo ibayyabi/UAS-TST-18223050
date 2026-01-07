@@ -17,5 +17,8 @@ COPY . .
 # Expose the application port
 EXPOSE 3000
 
+# Optimize Node.js for low memory environments
+ENV NODE_OPTIONS="--max-old-space-size=256"
+
 # Start the application
 CMD ["npm", "start"]
