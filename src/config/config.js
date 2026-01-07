@@ -5,7 +5,7 @@ const config = {
 
     gemini: {
         apiKey: process.env.GEMINI_API_KEY || '',
-        model: process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp'
+        model: process.env.GEMINI_MODEL || 'gemma-3-27b-it'
     },
 
     bookApi: {

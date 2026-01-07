@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 const routes = require('./routes/soundtrackRoutes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
@@ -35,18 +37,33 @@ app.use(helmet({
 // CORS middleware
 app.use(cors());
 
-// Body parser middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Compression middleware (gzip/brotli) for bandwidth savings  
+app.use(compression());
+
+// Global rate limiting
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_GLOBAL) || 100, // Max 100 requests per window
+    message: { success: false, error: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false
+});
+app.use(globalLimiter);
+
+// Body parser middleware with size limits
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
 // Serve static files (frontend)
 app.use(express.static('public'));
 
-// Request logging middleware
-app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next();
-});
+// Conditional request logging (only in development)
+if (process.env.NODE_ENV !== 'production') {
+    app.use((req, res, next) => {
+        console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+        next();
+    });
+}
 
 // API Routes
 app.use('/api', routes);

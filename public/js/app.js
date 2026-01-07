@@ -12,15 +12,57 @@ const appState = {
     searchResults: [],
     currentPage: 1,
     trendingBooks: [],
-    exploreResults: []
+    exploreResults: [],
+    // DOM element cache for performance
+    dom: {}
 };
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+    initDOMCache();
     initializeApp();
     setupEventListeners();
     loadTrendingBooks();
 });
+
+function initDOMCache() {
+    // Cache frequently accessed DOM elements
+    appState.dom = {
+        searchInput: document.getElementById('searchInput'),
+        searchBtn: document.getElementById('searchBtn'),
+        trendingBooks: document.getElementById('trendingBooks'),
+        searchQuery: document.getElementById('searchQuery'),
+        searchResults: document.getElementById('searchResults'),
+        loadingSubtext: document.getElementById('loadingSubtext'),
+        // Book detail elements
+        detailCover: document.getElementById('detailCover'),
+        detailTitle: document.getElementById('detailTitle'),
+        detailAuthor: document.getElementById('detailAuthor'),
+        detailGenre: document.getElementById('detailGenre'),
+        detailLanguage: document.getElementById('detailLanguage'),
+        detailYear: document.getElementById('detailYear'),
+        detailPages: document.getElementById('detailPages'),
+        detailRating: document.getElementById('detailRating'),
+        detailDescription: document.getElementById('detailDescription'),
+        detailTags: document.getElementById('detailTags'),
+        generateBtn: document.getElementById('generateBtn'),
+        // Recommendation elements
+        selectedCover: document.getElementById('selectedCover'),
+        selectedTitle: document.getElementById('selectedTitle'),
+        selectedAuthor: document.getElementById('selectedAuthor'),
+        recGenre: document.getElementById('recGenre'),
+        recMood: document.getElementById('recMood'),
+        recEnergy: document.getElementById('recEnergy'),
+        recEnergyValue: document.getElementById('recEnergyValue'),
+        recReasoning: document.getElementById('recReasoning'),
+        trackCount: document.getElementById('trackCount'),
+        musicTracks: document.getElementById('musicTracks'),
+        // Explore elements
+        genreFilter: document.getElementById('genreFilter'),
+        moodFilter: document.getElementById('moodFilter'),
+        exploreResults: document.getElementById('exploreResults')
+    };
+}
 
 function initializeApp() {
     showScreen('home');
@@ -110,7 +152,7 @@ async function loadTrendingBooks() {
 }
 
 function renderTrendingBooks() {
-    const container = document.getElementById('trendingBooks');
+    const container = appState.dom.trendingBooks;
     if (!container) return;
 
     container.innerHTML = '';
@@ -123,9 +165,9 @@ function renderTrendingBooks() {
         card.className = 'book-card-small';
         card.onclick = () => selectBookForDetail(book);
 
-        // Check if book has cover image
+        // Check if book has cover image - ADD LAZY LOADING
         const coverHtml = book.cover_url
-            ? `<img src="${book.cover_url}" alt="${book.title}" class="book-cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            ? `<img src="${book.cover_url}" alt="${book.title}" class="book-cover-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                <div class="book-icon" style="display:none;">📖</div>`
             : `<div class="book-icon">📖</div>`;
 
@@ -195,7 +237,7 @@ async function performSearch() {
         if (result.success) {
             appState.searchResults = result.data;
             appState.currentPage = 1;
-            document.getElementById('searchQuery').textContent = `"${query}"`;
+            appState.dom.searchQuery.textContent = `"${query}"`;
             renderSearchResults();
             showScreen('search-results');
         } else {
@@ -208,7 +250,7 @@ async function performSearch() {
 }
 
 function renderSearchResults() {
-    const container = document.getElementById('searchResults');
+    const container = appState.dom.searchResults;
     if (!container) return;
 
     container.innerHTML = '';
@@ -223,9 +265,9 @@ function renderSearchResults() {
         card.className = 'book-card-small';
         card.onclick = () => selectBookForDetail(book);
 
-        // Check if book has cover image
+        // Check if book has cover image - ADD LAZY LOADING
         const coverHtml = book.cover_url
-            ? `<img src="${book.cover_url}" alt="${book.title}" class="book-cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            ? `<img src="${book.cover_url}" alt="${book.title}" class="book-cover-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                <div class="book-icon" style="display:none;">📖</div>`
             : `<div class="book-icon">📖</div>`;
 
@@ -457,7 +499,7 @@ function renderExploreResults() {
 
 // Utility Functions
 function updateLoadingText(text) {
-    const loadingTextEl = document.getElementById('loadingSubtext');
+    const loadingTextEl = appState.dom.loadingSubtext;
     if (loadingTextEl) {
         loadingTextEl.textContent = text;
     }

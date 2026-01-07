@@ -5,6 +5,9 @@ node_modules/
 .env
 .env.local
 
+# Cache (Gemini persistent cache)
+.cache/
+
 # Logs
 logs/
 *.log

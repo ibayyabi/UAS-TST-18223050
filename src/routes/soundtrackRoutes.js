@@ -1,27 +1,44 @@
 const express = require('express');
 const router = express.Router();
+const rateLimit = require('express-rate-limit');
 const soundtrackController = require('../controllers/soundtrackController');
+
+// Strict rate limiting for recommendation endpoints (costs Gemini tokens)
+const recommendLimiter = rateLimit({
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES) * 60 * 1000 || 60 * 1000, // Default 1 minute
+    max: parseInt(process.env.RATE_LIMIT_RECOMMEND) || 5,
+    message: { success: false, error: 'Too many recommendation requests. Please wait before trying again.' },
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
+// Moderate rate limiting for search endpoints
+const searchLimiter = rateLimit({
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES) * 60 * 1000 || 60 * 1000,
+    max: 30,
+    message: { success: false, error: 'Too many search requests. Please wait before trying again.' }
+});
 
 /**
  * @route   GET /api/search-books?search=judul
  * @desc    Get books detail
  * @access  Public
  */
-router.get('/search-books', soundtrackController.searchBooks.bind(soundtrackController));
+router.get('/search-books', searchLimiter, soundtrackController.searchBooks.bind(soundtrackController));
 
 /**
  * @route   GET /api/recommend/:bookId
  * @desc    Get music recommendations for a specific book by ID
  * @access  Public
  */
-router.get('/recommend/:bookId', soundtrackController.getRecommendationsForBook.bind(soundtrackController));
+router.get('/recommend/:bookId', recommendLimiter, soundtrackController.getRecommendationsForBook.bind(soundtrackController));
 
 /**
  * @route   GET /api/recommend-by-title?title=judul
  * @desc    Get music recommendations for a specific book by title
  * @access  Public
  */
-router.get('/recommend-by-title', soundtrackController.getRecommendationsByTitle.bind(soundtrackController));
+router.get('/recommend-by-title', recommendLimiter, soundtrackController.getRecommendationsByTitle.bind(soundtrackController));
 
 /**
  * @route   GET /api/health

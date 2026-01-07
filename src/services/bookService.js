@@ -10,6 +10,15 @@ class BookService {
     constructor() {
         this.baseUrl = config.bookApi.baseUrl;
         this.apiKey = config.bookApi.apiKey;
+        
+        // Create configured Axios instance
+        this.axiosInstance = axios.create({
+            baseURL: this.baseUrl,
+            timeout: 3000, // Reduced from 5000ms for faster failure
+            params: {
+                apiKey: this.apiKey
+            }
+        });
     }
 
     /**
@@ -23,15 +32,13 @@ class BookService {
      */
     async getBooks(filters = {}) {
         try {
-            const response = await axios.get(`${this.baseUrl}/books`, {
+            const response = await this.axiosInstance.get('/books', {
                 params: {
-                    apiKey: this.apiKey,
                     search: filters.search,
                     genre: filters.genre,
                     top_rated: filters.top_rated,
                     page: filters.page || 1
-                },
-                timeout: 5000
+                }
             });
 
             const books = response.data.data || [];
@@ -48,12 +55,7 @@ class BookService {
      */
     async getBookById(bookId) {
         try {
-            const response = await axios.get(`${this.baseUrl}/books/${bookId}`, {
-                params: {
-                    apiKey: this.apiKey
-                },
-                timeout: 5000
-            });
+            const response = await this.axiosInstance.get(`/books/${bookId}`);
 
             return this._normalizeBook(response.data.data);
         } catch (error) {
@@ -71,12 +73,10 @@ class BookService {
         try {
             // Step 1: Search untuk mendapatkan ID
             console.log(`Searching for book: "${title}"`);
-            const response = await axios.get(`${this.baseUrl}/books`, {
+            const response = await this.axiosInstance.get('/books', {
                 params: {
-                    apiKey: this.apiKey,
                     search: title
-                },
-                timeout: 5000
+                }
             });
 
             const books = response.data.data || [];

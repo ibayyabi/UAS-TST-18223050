@@ -8,6 +8,15 @@ class MusicService {
     constructor() {
         this.baseUrl = config.musicApi.baseUrl;
         this.apiKey = config.musicApi.apiKey;
+        
+        // Create configured Axios instance
+        this.axiosInstance = axios.create({
+            baseURL: this.baseUrl,
+            timeout: 5000, // Reduced from 10000ms
+            headers: {
+                'X-API-Key': this.apiKey
+            }
+        });
     }
 
     /**
@@ -22,11 +31,7 @@ class MusicService {
     async searchMusic({ genre, mood, energyMax, limit = 10 }) {
         try {
             // Use /music/recommendations endpoint based on API documentation
-            const url = `${this.baseUrl}/music/recommendations`;
-
-            const headers = {
-                'X-API-Key': this.apiKey
-            };
+            const url = '/music/recommendations';
 
             // Build query parameters
             const params = {
@@ -47,11 +52,7 @@ class MusicService {
 
             console.log(`Searching music with params:`, params);
 
-            const response = await axios.get(url, {
-                headers,
-                params,
-                timeout: 10000 // 10 second timeout
-            });
+            const response = await this.axiosInstance.get(url, { params });
 
             if (!response.data) {
                 throw new Error('No data received from Music API');
@@ -89,16 +90,9 @@ class MusicService {
      */
     async getTrackById(trackId) {
         try {
-            const url = `${this.baseUrl}/tracks/${trackId}`;
+            const url = `/tracks/${trackId}`;
 
-            const headers = {
-                'X-API-Key': this.apiKey
-            };
-
-            const response = await axios.get(url, {
-                headers,
-                timeout: 10000
-            });
+            const response = await this.axiosInstance.get(url);
 
             return response.data.data || response.data;
 

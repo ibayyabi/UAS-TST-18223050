@@ -66,13 +66,19 @@ Thriller → ambient/tense/energy:7
 Return ONLY valid JSON.`;
 
 /**
- * Create user prompt for specific book - OPTIMIZED
+ * Create user prompt for specific book - OPTIMIZED FOR GEMMA
  * @param {Object} bookData - Book information
- * @returns {string} Formatted user prompt
+ * @returns {string} Formatted user prompt with system instructions
  */
 function createUserPrompt(bookData) {
   const tagsStr = Array.isArray(bookData.tags) ? bookData.tags.join(', ') : '';
-  return `Book: "${bookData.title}"
+  
+  // For Gemma: Combine system prompt + user prompt
+  return `${SYSTEM_PROMPT}
+
+---
+
+Book: "${bookData.title}"
 Genre: ${bookData.genre}
 Description: "${bookData.description}"
 Tags: ${tagsStr}

@@ -110,21 +110,39 @@ class SoundtrackController {
     }
 
     /**
-     * Health check endpoint
+     * Comprehensive health check endpoint - checks all services
      * @param {Object} req - Express request
      * @param {Object} res - Express response
      */
     async healthCheck(req, res) {
         try {
-            const geminiStatus = await geminiService.testConnection();
+            // Check all services concurrently
+            const checks = await Promise.allSettled([
+                // Gemini AI check
+                geminiService.testConnection(),
+                
+                // Book API check
+                bookService.getBooks({ page: 1 }).then(() => true).catch(() => false),
+                
+                // Music API check
+                musicService.searchMusic({ limit: 1 }).then(() => true).catch(() => false)
+            ]);
 
-            return res.status(200).json({
+            const [geminiCheck, bookCheck, musicCheck] = checks;
+
+            const services = {
+                gemini: geminiCheck.status === 'fulfilled' && geminiCheck.value ? 'connected' : 'disconnected',
+                bookApi: bookCheck.status === 'fulfilled' && bookCheck.value ? 'connected' : 'disconnected',
+                musicApi: musicCheck.status === 'fulfilled' && musicCheck.value ? 'connected' : 'disconnected'
+            };
+
+            const allConnected = Object.values(services).every(status => status === 'connected');
+
+            return res.status(allConnected ? 200 : 503).json({
                 success: true,
-                status: 'ok',
+                status: allConnected ? 'ok' : 'degraded',
                 timestamp: new Date().toISOString(),
-                services: {
-                    gemini: geminiStatus ? 'connected' : 'disconnected'
-                }
+                services
             });
         } catch (error) {
             return res.status(500).json({
